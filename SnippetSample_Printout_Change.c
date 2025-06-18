@@ -61,5 +61,7 @@ int CheckElementCnt(FILE *read_fp, SSL *s)
 
     sCsv_data = malloc(sizeof(_CSV_DATA) * element_cnt) ;
 
+
+	
     return element_cnt ;
 }
