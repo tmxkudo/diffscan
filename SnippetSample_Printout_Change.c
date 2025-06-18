@@ -5,15 +5,11 @@ int CheckElementCnt(FILE *read_fp)
     int i ;
     unsigned char buf[READ_SIZE + 1] ;
 
-
     element_cnt = 0 ;
-
     memset(buf, '\0', sizeof(buf)) ;
-
 
     if ( fgets(buf, READ_SIZE, read_fp) != NULL )
     {
-
         buf_len = strlen(buf) ;
         for ( i = 0; i < buf_len; i++ )
         {
