@@ -1,5 +1,4 @@
-void fastcall
-prepare_to_wait(wait_queue_head_t *q, wait_queue_t *wait, int state)
+void fastcall prepare_to_wait(wait_queue_head_t *q, wait_queue_t *wait, int state)
 {
     unsigned long flags;
 
