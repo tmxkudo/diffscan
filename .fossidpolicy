@@ -8,7 +8,7 @@
     "id":"Apache-2.0",
     "blocked": false,
     "reason": "Permissive License"
-  }
+  },
   {
     "id":"OpenSSL",
     "blocked": false,
