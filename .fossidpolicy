@@ -9,4 +9,9 @@
     "blocked": false,
     "reason": "Permissive License"
   }
+  {
+    "id":"OpenSSL",
+    "blocked": false,
+    "reason": "Permissive License"
+  }
 ]
