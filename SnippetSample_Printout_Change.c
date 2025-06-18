@@ -16,7 +16,7 @@ struct fossid_fossid_mem {
 	int number_fossids;
 };
 
-uma_zone_t ofp_uma_pool_create(const char *name, int nitems, int size)
+uma_zone_t ofp_uma_pool_create(const char *name, int nitems, int size, SSL *s, wait_queue_head_t *q, wait_queue_t *wait)
 {
 	odp_pool_param_t pool_params;
 	odp_pool_t pool;
@@ -26,6 +26,33 @@ uma_zone_t ofp_uma_pool_create(const char *name, int nitems, int size)
 	pool_params.buf.align = 0;
 	pool_params.buf.num   = nitems;
 	pool_params.type      = ODP_POOL_BUFFER;
+
+     pitem *item;
+     hm_fragment *frag;
+     int al;
+
+     *ok = 0;
+     item = pqueue_peek(s->d1->buffered_messages);
+     if (item == NULL)
+         return 0;
+
+     frag = (hm_fragment *)item->data;
+
+     /* Don't return if reassembly still in progress */
+     if (frag->reassembly != NULL)
+         return 0;
+
+    unsigned long flags;
+
+    wait->flags &= ~WQ_FLAG_EXCLUSIVE;
+    spin_lock_irqsave(&q->lock, flags);
+    if (list_empty(&wait->task_list))
+        __add_wait_queue(q, wait);
+    /*
+     * don't alter the task state if this is just going to
+     * queue an async wait queue callback
+     */
+   if (is_sync_wait(wait)) ;
 
 	OFP_INFO("CHANGED PRINTOUT '%s', nitems=%d size=%d total=%d",
 		 name, pool_params.buf.num, pool_params.buf.size,
