@@ -1,4 +1,4 @@
-name: FossID Scanning
+name: FossID Diff Scanning
 
 # Controls when the workflow will run
 on:
