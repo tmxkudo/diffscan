@@ -1,4 +1,4 @@
-name: Repository_scan
+name: FossID Repository Scanning
 
 on:
   pull_request:
