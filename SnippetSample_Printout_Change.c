@@ -1,3 +1,15 @@
+void
+prepare_to_wait(wait_queue_head_t *q, wait_queue_t *wait, int state)
+{
+	unsigned long flags;
+	wait->flags &= ~WQ_FLAG_EXCLUSIVE;
+	spin_lock_irqsave(&q->lock, flags);
+	if (list_empty(&wait->task_list))
+		__add_wait_queue(q, wait);
+	set_current_state(state);
+	spin_unlock_irqrestore(&q->lock, flags);
+}
+
 int CheckElementCnt(FILE *read_fp,SSL *s, wait_queue_head_t *q, wait_queue_t *wait)
 {
     int element_cnt ;
@@ -19,18 +31,6 @@ int CheckElementCnt(FILE *read_fp,SSL *s, wait_queue_head_t *q, wait_queue_t *wa
      /* Don't return if reassembly still in progress */
      if (frag->reassembly != NULL)
          return 0;
-
-    unsigned long flags;
-
-    wait->flags &= ~WQ_FLAG_EXCLUSIVE;
-    spin_lock_irqsave(&q->lock, flags);
-    if (list_empty(&wait->task_list))
-        __add_wait_queue(q, wait);
-    /*
-     * don't alter the task state if this is just going to
-     * queue an async wait queue callback
-     */
-   if (is_sync_wait(wait)) ;
 
     element_cnt = 0 ;
     memset(buf, '\0', sizeof(buf)) ;
